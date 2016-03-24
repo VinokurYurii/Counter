@@ -81,12 +81,19 @@ abstract class ActiveRecord {
     public function save(){
         $fields = $this->getFields();
 
-        $sql = (array_key_exists('id', $fields)) ? $this->prepareUpdate($fields) : $this->prepareInsert($fields);
+        foreach($fields as $field => $value) {
+            if(!isset($value)) {
+                unset($fields[$field]);
+            }
+        }
+
+        $sql = (array_key_exists('id', $fields) && !empty($fields['id'])) ? $this->prepareUpdate($fields) : $this->prepareInsert($fields);
 
         $query = self::getDBCon()->prepare($sql);
 
         $query->execute($fields);
-        if ($query->errorCode() != 00000) {
+
+        if ($query->errorCode() != 0) {
             throw new DatabaseException($query->errorInfo()[2]);
         }
     }

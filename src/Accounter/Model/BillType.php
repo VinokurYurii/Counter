@@ -4,20 +4,24 @@ namespace Accounter\Model;
 
 use Framework\Model\ActiveRecord;
 use Accounter\Model\BillSpecies;
+use Framework\Validation\Filter\Length;
+use Framework\Validation\Filter\NotBlank;
+use Framework\DI\Service;
 
 class BillType extends ActiveRecord {
-    public $id, $parnt_id, $has_child, $type, $comment, $childs;
-    public $species = array();
+    public $id, $parent_id, $has_child, $type, $comment, $childs, $owner_id;
+    public $sum;
+    public $species;
 
     public static function findBills($mode = 'all') {
-        //$query = 'SELECT * FROM bill_types WHERE parent_id IS NULL';
         $query = 'SELECT * FROM bill_types WHERE ';
         if($mode === 'all') {
-            $query .= 'parent_id IS NULL';
+            $query .= 'parent_id=0';
         }
         else if (is_numeric($mode)) {
             $query .= 'id=' . $mode;
         }
+        $query .= ' and owner_id=' . Service::get('security')->getUser()->id;
         $mainTypes = static::sqlQuery($query)->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
 
         foreach($mainTypes as $main) {
@@ -53,6 +57,7 @@ class BillType extends ActiveRecord {
         if(!empty($billType->childs)) {
             foreach($billType->childs as $child) {
                 self::walkOnTheChildrenAndAddSpecies($child);
+                $billType->sum += $child->sum;
             }
         }
     }
@@ -60,5 +65,21 @@ class BillType extends ActiveRecord {
     public static function findBillSpecies(BillType $billType) {
         $query = 'SELECT * FROM bill_species WHERE type_id=' . $billType->id;
         $billType->species = static::sqlQuery($query)->fetchAll(\PDO::FETCH_CLASS, BillSpecies::getClass());
+        foreach($billType->species as $species) {
+            $billType->sum += $species->amount;
+        }
+    }
+
+    public function getRules() {
+        return array(
+            'type'   => array(
+                new NotBlank(),
+                new Length(4, 100)
+            )
+        );
+    }
+
+    public static function getTable() {
+        return 'bill_types';
     }
 }

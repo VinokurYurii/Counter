@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 CREATE TABLE IF NOT EXISTS `bill_types`(
   `id` int not null auto_increment primary key,
-  `parent_id` int,
+  `parent_id` int not null default 0,
   `has_child` boolean not null default false,
   `type` varchar(100) not null,
   `comment` text not null
@@ -56,5 +56,7 @@ CREATE TABLE IF NOT EXISTS `bill_species`(
   `type_id` int not null,
   `species` varchar(100) not null,
   `comment` text not null default '',
+  `create_date` datetime NOT NULL,
+  `update_date` datetime NOT NULL,
   `amount` float(10,2) not null
   ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;

@@ -34,7 +34,7 @@ return array(
         }
         if ($bill->has_child) {
             foreach($bill->childs as $child) {
-                echo '<a href="/bill_type/' . $child->id . '">' . $child->type . '</a>';
+                echo '<a href="/bill_type/' . $child->id . '">' . $child->type . '</a>: <strong>' . $child->sum . '</strong>';
                 $walkOnBills($child);
             }
         }

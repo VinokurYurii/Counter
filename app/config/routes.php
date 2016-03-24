@@ -80,5 +80,13 @@ return array(
         '_requirements' => array(
             'id' => '\d+'
         )
+    ),
+    'add_bill_type'    => array(
+        'pattern'  => '/bill_type/add/{id}',
+        'controller'    => 'Accounter\\Controller\\BillController',
+        'action'        => 'addBillType',
+        '_requirements' => array(
+            'id' => '\d+'
+        )
     )
 );
