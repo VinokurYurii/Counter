@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS `bill_types`(
   `parent_id` int not null default 0,
   `has_child` boolean not null default false,
   `type` varchar(100) not null,
-  `comment` text not null
+  `comment` text not null,
+  `owner_id` int not NULL
   ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
 CREATE TABLE IF NOT EXISTS `bill_species`(
