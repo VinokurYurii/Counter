@@ -58,12 +58,11 @@ $getErrorBody = function ($field) use ($errors){
             <?php $generateToken() ?>
             <?php
             echo '<input type="hidden" name="parent_id" id="parent_id" value="' . $parentBillTypeId . '">';
-            echo $action;
             ?>
 
             <div class="btn-group pull-right">
                 <button type="submit" class="btn btn-success mr-5">Save</button>
-                <a href="/" class="btn btn-danger">Cancel</a>
+                <a href="/bills" class="btn btn-danger">Cancel</a>
             </div>
         </form>
     </div>

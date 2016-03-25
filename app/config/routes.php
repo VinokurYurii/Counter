@@ -71,7 +71,8 @@ return array(
     'bills'         => array(
         'pattern'    => '/bills',
         'controller' => 'Accounter\\Controller\\BillController',
-        'action'     => 'index'
+        'action'     => 'index',
+        'security'   => array('ROLE_USER'),
     ),
     'show_bill_type'    => array(
         'pattern'  => '/bill_type/{id}',
@@ -79,7 +80,8 @@ return array(
         'action'        => 'showBillType',
         '_requirements' => array(
             'id' => '\d+'
-        )
+        ),
+        'security'   => array('ROLE_USER'),
     ),
     'add_bill_type'    => array(
         'pattern'  => '/bill_type/add/{id}',
@@ -87,6 +89,25 @@ return array(
         'action'        => 'addBillType',
         '_requirements' => array(
             'id' => '\d+'
-        )
+        ),
+        'security'   => array('ROLE_USER'),
+    ),
+    'add_bill_species'    => array(
+        'pattern'  => '/bill_species/add/{id}',
+        'controller'    => 'Accounter\\Controller\\BillController',
+        'action'        => 'addSpecies',
+        '_requirements' => array(
+            'id' => '\d+'
+        ),
+        'security'   => array('ROLE_USER'),
+    ),
+    'show_bill_species'    => array(
+        'pattern'  => '/bill_species/{id}',
+        'controller'    => 'Accounter\\Controller\\BillController',
+        'action'        => 'showSpecies',
+        '_requirements' => array(
+            'id' => '\d+'
+        ),
+        'security'   => array('ROLE_USER'),
     )
 );

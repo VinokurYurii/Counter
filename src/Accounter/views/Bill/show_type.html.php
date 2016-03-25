@@ -1,8 +1,3 @@
-<?php
-/*$date = new \DateTime();
-$date->setTimestamp(strtotime($post->date));*/
-?>
-
 <div class="row">
     <a href="/bill_type/<?php echo $bill->id; ?>"><?php echo $bill->type; ?></a>: <strong><?php echo isset($bill->sum) ?
             $bill->sum : 0 ?></strong>
@@ -21,5 +16,5 @@ if(!empty($bill->comment)) {
 </div>
 <br>
 <div>
-    <a href="#"><button>Добавить чек</button></a>
+    <a href="/bill_species/add/<?php echo $bill->id ?>"><button>Добавить чек</button></a>
 </div>

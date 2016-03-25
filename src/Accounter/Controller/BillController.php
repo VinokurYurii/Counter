@@ -28,7 +28,7 @@ class BillController extends Controller {
                 $billType->type      = $this->getRequest()->post('type');
                 $billType->comment   = trim($this->getRequest()->post('comment'));
                 $billType->owner_id  = Service::get('security')->getUser()->id;
-                
+
                 $validator = new Validator($billType);
                 if ($validator->isValid()) {
                     Service::get('db')->getConnection()->beginTransaction();
@@ -54,6 +54,45 @@ class BillController extends Controller {
         return $this->render(
             'add_type.html',
             array('action' => '/bill_type/add/' . $parentBillTypeId/*$this->generateRoute('add_bill_type')*/, 'errors' => isset($error)?$error:null, 'parentBillTypeId' => $parentBillTypeId)
+        );
+    }
+
+    public function showSpeciesAction($billSpeciesId) {
+        $species = BillSpecies::find((int)$billSpeciesId);
+
+        return $this->render('show_species.html', array('species' => $species));
+    }
+
+    public function addSpeciesAction($parentBillTypeId = 0) {
+
+        if ($this->getRequest()->isPost()) {
+            try{
+                $species              = new BillSpecies();
+                $date                 = new \DateTime();
+                $species->type_id     = $this->getRequest()->post('type_id');
+                $species->species     = $this->getRequest()->post('species');
+                $amount               = $this->getRequest()->post('amount');
+                $species->amount      = Service::get('formatData')->formatFloat($amount);
+                $species->comment     = trim($this->getRequest()->post('comment'));
+                $species->create_date = $date->format('Y-m-d H:i:s');
+
+                $validator = new Validator($species);
+                if ($validator->isValid()) {
+                    $species->save();
+                    return $this->redirect('/bill_type/' . $species->type_id/*$this->generateRoute('bills')*/,
+                        'The data has been saved successfully');
+                } else {
+                    $error = $validator->getErrors();
+                }
+            } catch(DatabaseException $e){
+                throw new DatabaseException($e->getMessage());
+            }
+        }
+
+        return $this->render(
+            'add_species.html',
+            array('action' => '/bill_species/add/' . $parentBillTypeId/*$this->generateRoute('add_bill_species')*/,
+                'errors' => isset($error)?$error:null, 'parentBillTypeId' => $parentBillTypeId)
         );
     }
 }

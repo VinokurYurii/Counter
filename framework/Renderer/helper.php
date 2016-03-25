@@ -29,12 +29,14 @@ return array(
         echo '<ul>';
         if (!empty($bill->species)) {
             foreach($bill->species as $species) {
-                echo '<li>' . $species->species . ' cost: ' . $species->amount . '</li>';
+                echo '<li><a href="/bill_species/' . $species->id . '" style="color: #ec7ddc">' . $species->species .
+                    '</a> cost: ' . $species->amount . '</li>';
             }
         }
         if ($bill->has_child) {
             foreach($bill->childs as $child) {
-                echo '<a href="/bill_type/' . $child->id . '">' . $child->type . '</a>: <strong>' . $child->sum . '</strong>';
+                echo '<a href="/bill_type/' . $child->id . '" style="color: #a62eae">' . $child->type .
+                    '</a>: <strong>' . $child->sum . '</strong>';
                 $walkOnBills($child);
             }
         }

@@ -27,7 +27,8 @@ class Renderer {
     public static function renderMain($content, $flush = array(array())) { //render layout
         $route = Service::get('router')->parseRoute($_SERVER['REQUEST_URI']);
         $user = Service::get('security')->getUser();
-        return self::render(self::$main_template, compact('content', 'user', 'route', 'flush', 'walkOnBills'), false);
+        return self::render(self::$main_template, compact('content', 'user', 'route', 'flush', 'walkOnBills',
+            'parentBillTypeId'), false);
     }
 
     public static function render($template_path, $data = array(), $wrap = true) { //render template
