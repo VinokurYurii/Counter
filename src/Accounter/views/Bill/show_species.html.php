@@ -26,3 +26,4 @@ $update_date->setTimestamp(strtotime($species->update_date));
 <br>
 <div>
     <a href="/bill_type/<?php echo $species->type_id; ?>"><button>Вернуться к виду платежей</button></a>
+</div>
