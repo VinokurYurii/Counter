@@ -29,7 +29,7 @@ return array(
         echo '<ul>';
         if (!empty($bill->species)) {
             foreach($bill->species as $species) {
-                echo '<li>' . $species->species . ' cost: ' . $species->amount . '</li>';
+                echo '<li><a href="/bill_species/' . $species->id . '">' . $species->species . '</a> cost: ' . $species->amount . '</li>';
             }
         }
         if ($bill->has_child) {
