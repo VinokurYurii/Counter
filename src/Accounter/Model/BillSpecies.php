@@ -10,7 +10,7 @@ use Framework\Validation\Filter\NotBlank;
 use Framework\Validation\Filter\IsFloat;
 
 class BillSpecies extends ActiveRecord {
-    public $id, $type_id, $species, $comment, $amount, $create_date, $update_date;
+    public $id, $type_id, $species, $comment, $amount, $create_date, $update_date, $owner_id;
 
     public static function findSpecies($id) {
         $query = 'SELECT * FROM ' . self::getTable() . ' WHERE id=' . $id;
@@ -24,7 +24,7 @@ class BillSpecies extends ActiveRecord {
 
     public static function checkOwner($typeId) {
         $billType = BillType::findBills($typeId);
-        return $billType->owner_id == Service::get('securit')->getUser()->id;
+        return $billType->owner_group_id == Service::get('securit')->getUser()->group_id;
     }
 
     public function getRules() {
@@ -42,5 +42,11 @@ class BillSpecies extends ActiveRecord {
 
     public static function getTable() {
         return 'bill_species';
+    }
+
+    public function __get($name) {
+        if ($name === 'name') {
+            return ActiveRecord::getUserEmailById((int)$this->owner_id);
+        }
     }
 }

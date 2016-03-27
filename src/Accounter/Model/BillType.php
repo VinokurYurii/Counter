@@ -9,7 +9,7 @@ use Framework\Validation\Filter\NotBlank;
 use Framework\DI\Service;
 
 class BillType extends ActiveRecord {
-    public $id, $parent_id, $has_child, $type, $comment, $childs, $owner_id;
+    public $id, $parent_id, $has_child, $type, $comment, $childs, $owner_group_id;
     public $sum;
     public $species;
 
@@ -21,7 +21,9 @@ class BillType extends ActiveRecord {
         else if (is_numeric($mode)) {
             $query .= 'id=' . $mode;
         }
-        $query .= ' and owner_id=' . Service::get('security')->getUser()->id;
+        $owner_group_id = isset(Service::get('security')->getUser()->group_id) ?
+            Service::get('security')->getUser()->group_id :  0;
+        $query .= ' and owner_group_id=' . $owner_group_id;
         $mainTypes = static::sqlQuery($query)->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
 
         foreach($mainTypes as $main) {
@@ -81,5 +83,15 @@ class BillType extends ActiveRecord {
 
     public static function getTable() {
         return 'bill_types';
+    }
+
+    public static function findMainType($typeId) {
+        $query = "SELECT * FROM bill_types where id=" . $typeId;
+        $type  = static::sqlQuery($query)->fetchAll(\PDO::FETCH_CLASS, static::getClass())[0];
+        if ($type->parent_id != 0) {
+            return self::findMainType($type->parent_id);
+        } else {
+            return $type;
+        }
     }
 }

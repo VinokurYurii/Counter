@@ -13,6 +13,7 @@ class FormatDataService implements ServiceInterface {
     }
 
     public function formatFloat($float) {
-        return str_replace(",", ".", $float);
+        $r_float = trim($float);
+        return str_replace(",", ".", $r_float);
     }
 }

@@ -29,13 +29,13 @@ return array(
         echo '<ul>';
         if (!empty($bill->species)) {
             foreach($bill->species as $species) {
-                echo '<li><a href="/bill_species/' . $species->id . '" style="color: #ec7ddc">' . $species->species .
-                    '</a> cost: ' . $species->amount . '</li>';
+                echo '<li><a href="/bill_species/' . $species->id . '" style="color: #3d49e5">' . $species->species .
+                    '</a> Сумма: ' . $species->amount . ' создано ' . $species->name . '</li>';
             }
         }
         if ($bill->has_child) {
             foreach($bill->childs as $child) {
-                echo '<a href="/bill_type/' . $child->id . '" style="color: #a62eae">' . $child->type .
+                echo '<a href="/bill_type/' . $child->id . '" style="color: #74c515">' . $child->type .
                     '</a>: <strong>' . $child->sum . '</strong>';
                 $walkOnBills($child);
             }

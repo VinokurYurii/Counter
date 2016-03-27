@@ -23,11 +23,11 @@ class BillController extends Controller {
 
         if ($this->getRequest()->isPost()) {
             try{
-                $billType            = new BillType();
-                $billType->parent_id = $this->getRequest()->post('parent_id');
-                $billType->type      = $this->getRequest()->post('type');
-                $billType->comment   = trim($this->getRequest()->post('comment'));
-                $billType->owner_id  = Service::get('security')->getUser()->id;
+                $billType                 = new BillType();
+                $billType->parent_id      = $this->getRequest()->post('parent_id');
+                $billType->type           = $this->getRequest()->post('type');
+                $billType->comment        = trim($this->getRequest()->post('comment'));
+                $billType->owner_group_id = Service::get('security')->getUser()->group_id;
 
                 $validator = new Validator($billType);
                 if ($validator->isValid()) {
@@ -75,9 +75,12 @@ class BillController extends Controller {
                 $species->amount      = Service::get('formatData')->formatFloat($amount);
                 $species->comment     = trim($this->getRequest()->post('comment'));
                 $species->create_date = $date->format('Y-m-d H:i:s');
+                $species->update_date = $date->format('Y-m-d H:i:s');
+                $species->owner_id    = Service::get('security')->getUser()->id;
 
                 $validator = new Validator($species);
                 if ($validator->isValid()) {
+                    $species->amount = $this->IsProfit($species->type_id) ? $species->amount : $species->amount * -1;
                     $species->save();
                     return $this->redirect('/bill_type/' . $species->type_id/*$this->generateRoute('bills')*/,
                         'The data has been saved successfully');
@@ -94,5 +97,9 @@ class BillController extends Controller {
             array('action' => '/bill_species/add/' . $parentBillTypeId/*$this->generateRoute('add_bill_species')*/,
                 'errors' => isset($error)?$error:null, 'parentBillTypeId' => $parentBillTypeId)
         );
+    }
+
+    private function IsProfit($parentTypeId) {
+        return BillType::findMainType($parentTypeId)->type == 'PROFIT';
     }
 }

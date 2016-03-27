@@ -42,7 +42,8 @@ class SecurityService implements ServiceInterface {
         foreach(range(1, 10) as $i) {
             $solt .= rand(1, 10);
         }
-        return $solt;
+        //return (int)$solt;
+        return '1234567890';
     }
 
     public function isPasswordMatch($password, $user) {

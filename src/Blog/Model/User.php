@@ -12,6 +12,7 @@ class User extends ActiveRecord implements UserInterface
     public $password;
     public $role;
     public $solt;// little upgrade
+    public $group_id;
 
     public static function getTable() {
         return 'users';
