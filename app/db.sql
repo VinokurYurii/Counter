@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `content` text NOT NULL,
   `date` datetime NOT NULL,
   `user_id` int(11) NOT NULL,
+  `user_group` int,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `bill_types`(
   `has_child` boolean not null default false,
   `type` varchar(100) not null,
   `comment` text not null,
-  `owner_id` int not NULL
+  `owner_group_id` int not NULL
   ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
 CREATE TABLE IF NOT EXISTS `bill_species`(
@@ -59,5 +60,6 @@ CREATE TABLE IF NOT EXISTS `bill_species`(
   `comment` text not null default '',
   `create_date` datetime NOT NULL,
   `update_date` datetime NOT NULL,
-  `amount` float(10,2) not null
+  `amount` float(10,2) NOT NULL,
+  `owner_id` int not NULL
   ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;

@@ -32,18 +32,17 @@ class SecurityService implements ServiceInterface {
     }
 
     public function getSoltedPassword($password) {
-        $solt = $this->getSolt();
+        $solt = $this->getRandomNumber();
         $soltedPassword = hash('sha256', $password . $solt);
         return array('soltedPassword' => $soltedPassword, 'solt' => $solt);
     }
 
-    public function getSolt() {
-        $solt = '';
-        foreach(range(1, 10) as $i) {
-            $solt .= rand(1, 10);
+    public function getRandomNumber() {
+        $r_number = '';
+        for($i = 0; $i < 10; $i++) {
+            $r_number .= rand(0, 9);
         }
-        //return (int)$solt;
-        return '1234567890';
+        return $r_number;
     }
 
     public function isPasswordMatch($password, $user) {
@@ -51,7 +50,7 @@ class SecurityService implements ServiceInterface {
     }
 
     public function generateToken() {
-        $token = hash('sha256', $this->getSolt()); // =)
+        $token = hash('sha256', $this->getRandomNumber());
         $this->addToSession('token', $token);
         setcookie('token', $token);
         echo '<input type="hidden" name="token" value=' . $token . '>';
