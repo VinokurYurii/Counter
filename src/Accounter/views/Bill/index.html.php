@@ -1,4 +1,8 @@
 <div class="col-sm-8 blog-main">
+    <div>
+        <a href="/bill_type/add/0"><button>Добавить вид расхода</button></a>
+    </div>
+    <br/>
     <?php
     $mainSum = 0;
     foreach ($bills as $bill) { ?>
@@ -9,7 +13,44 @@
     <div>
         <strong>Баланс: <?php echo $mainSum; ?></strong>
     </div>
-    <div>
-        <a href="/bill_type/add/0"><button>Добавить вид расхода</button></a>
-    </div>
 </div>
+<div class="col-sm-8 blog-main">
+    <form action="/counter/ajax_receiver"  id="show" method="post" accept-charset="utf-8">
+        <input type="text" name="favorite_beverage" value="" placeholder="Favorite restaurant" />
+        <input type="text" name="favorite_restaurant" value="" placeholder="Favorite beverage" />
+        <select name="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <input type="submit" name="submit" value="Submit form" />
+    </form>
+</div>
+<div class=".the-return">
+</div>
+<script type="text/javascript">
+    $("document").ready(function(){
+        $("#show").submit(function(){
+            var data = {
+                "action": "test"
+            };
+            data = $(this).serialize() + "&" + $.param(data);
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/counter/ajax_receiver", //Relative or absolute path to response.php file
+                data: data,
+                success: function(data) {
+                    $(".the-return").html(
+                        "Favorite beverage: " + data["favorite_beverage"] + "<br />Favorite restaurant: " +
+                        data["favorite_restaurant"] + "<br />Gender: " + data["gender"] + "<br />JSON: " + data["json"]
+                    );
+                    alert("Form submitted successfully.\nReturned json: " + data["json"]);
+                },
+                error :	function(xhr, textStatus, errorObj){
+                    alert('Произошла критическая ошибка!');
+                }
+            });
+            return false;
+        });
+    });
+</script>

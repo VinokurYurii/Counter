@@ -7,9 +7,13 @@ use Framework\Exception\ServiceException;
 use Framework\Response\Response;
 use Blog\Model\User;
 
+/**
+ * Class Renderer
+ * @package Framework\Renderer
+ */
 class Renderer {
 
-    protected static $main_template = '';
+    protected static $main_template = ''; //keep path to main template
 
     public function __construct($main_template_file = '') {
 
@@ -27,8 +31,7 @@ class Renderer {
     public static function renderMain($content, $flush = array(array())) { //render layout
         $route = Service::get('router')->parseRoute($_SERVER['REQUEST_URI']);
         $user = Service::get('security')->getUser();
-        return self::render(self::$main_template, compact('content', 'user', 'route', 'flush', 'walkOnBills',
-            'parentBillTypeId'), false);
+        return self::render(self::$main_template, compact('content', 'user', 'route', 'flush'), false);
     }
 
     public static function render($template_path, $data = array(), $wrap = true) { //render template

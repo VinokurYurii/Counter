@@ -5,12 +5,14 @@ namespace Framework\Model;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
 
+/**
+ * Class ActiveRecord
+ * @package Framework\Model
+ *
+ * main object for work with db
+ */
 abstract class ActiveRecord {
-    protected static $db;
-
-    public function __construct() {
-
-    }
+    protected static $db; //PDO object with db connection
 
     public static function getDBCon(){
         if(empty(self::$db)){
@@ -37,20 +39,27 @@ abstract class ActiveRecord {
         return $result;
     }
 
-    public static function findByEmail($email) {
+    public static function findByEmail($email) { //find user by email
         $table = static::getTable(); // Prepare SQL request
         $sql = "SELECT * FROM " . $table . " WHERE email='" . $email . "'";
         $query = self::getDBCon()->prepare($sql);
         $query->execute();
-        $result = $query->fetchAll(\PDO::FETCH_CLASS, static::getClass())[0];
+        $result = $query->fetchAll(\PDO::FETCH_CLASS, static::getClass());
 
         if ($query->rowCount() == 0) {
             return false;
         }
 
-        return $result;
+        return $result[0];
     }
 
+    /**
+     * @param string $mode
+     * @return mixed
+     * @throws DatabaseException
+     *
+     * find data in db by id, return single object or array of object depending on $mode
+     */
     public static function find($mode = 'all'){
         $table = static::getTable(); // Prepare SQL request
         $sql = "SELECT * FROM " . $table;
@@ -74,10 +83,15 @@ abstract class ActiveRecord {
         return $result;
     }
 
-    public function getFields(){
+    public function getFields(){ // return associative array of property and it value
         return get_object_vars($this);
     }
 
+    /**
+     * @throws DatabaseException
+     *
+     * save new or update row in db
+     */
     public function save(){
         $fields = $this->getFields();
 
@@ -87,23 +101,22 @@ abstract class ActiveRecord {
             }
         }
 
-        $sql = (array_key_exists('id', $fields) && !empty($fields['id'])) ? $this->prepareUpdate($fields) : $this->prepareInsert($fields);
+        $sql = (array_key_exists('id', $fields)) ? $this->prepareUpdate($fields) : $this->prepareInsert($fields);
 
         $query = self::getDBCon()->prepare($sql);
 
         $query->execute($fields);
-
-        if ($query->errorCode() != 0) {
+        if ($query->errorCode() != 00000) {
             throw new DatabaseException($query->errorInfo()[2]);
         }
     }
 
-    public static function sqlQuery($sqlQuery) {
-        $query = self::getDBCon()->prepare($sqlQuery);
-        $query->execute();
-        return $query;
-    }
-
+    /**
+     * @param $fields
+     * @return mixed|string
+     *
+     * prepare query for insert action
+     */
     private function prepareInsert($fields) {
         $sql = 'INSERT INTO ' . static::getTable() . ' (';
 
@@ -121,6 +134,12 @@ abstract class ActiveRecord {
         return $sql;
     }
 
+    /**
+     * @param $fields
+     * @return mixed|string
+     *
+     * prepare query for update action
+     */
     private function prepareUpdate($fields) {
         $sql = 'UPDATE ' . static::getTable() . ' SET ';
 
@@ -133,6 +152,12 @@ abstract class ActiveRecord {
         $sql = preg_replace("/, $/", ' WHERE id=:id', $sql);
 
         return $sql;
+    }
+
+    public static function sqlQuery($sqlQuery) {
+        $query = self::getDBCon()->prepare($sqlQuery);
+        $query->execute();
+        return $query;
     }
 }
 

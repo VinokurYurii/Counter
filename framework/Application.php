@@ -1,8 +1,10 @@
 <?php
 namespace Framework;
 
+use Framework\Exception\AuthRequredException;
 use Framework\Exception\MainException;
 use Framework\Exception\SecurityException;
+use Framework\Exception\ServiceException;
 use Framework\Response\JsonResponse;
 use Framework\Response\ResponseRedirect;
 use Framework\Exception\HttpNotFoundException;
@@ -60,6 +62,8 @@ class Application {
      * @param $method
      * @param array $data
      * @throws HttpNotFoundException
+     *
+     * handle data and run needles metdod in needle controller
      */
     public static function runControllerMethod ($controller, $method, $data = array()) {
         $controllerReflication = new \ReflectionClass($controller);
@@ -87,18 +91,23 @@ class Application {
                 throw new HttpNotFoundException(501);
             }
         }
+        else {
+            throw new ServiceException(501);
+        }
     }
 
     /**
-     * main application running function
+     * @throws Exception\ServiceException, Exception\AuthRequredException
      *
-     * @throws Exception\ServiceException
+     * run application
      */
     public function run() {
         /**
          * get route depending on REQUEST_URI
          */
         $route = Service::get('router')->parseRoute(htmlspecialchars($_SERVER['REQUEST_URI']));
+
+        //echo '<pre>';print_r($route); die();
          try {
              if (!empty($route)) {
                  /**
@@ -109,7 +118,10 @@ class Application {
                       * get current user
                       */
                      $user = Service::get('security')->getUser();
-                     if (is_null($user) || !in_array($user->role, $route['security'])) {
+                     if (is_null($user)) {
+                         throw new AuthRequredException('If you wont do this action please login or signin.');
+                     }
+                     if (!in_array($user->role, $route['security'])) {
                          throw new SecurityException('You have not right for this action.');
                      }
                  }
@@ -122,7 +134,7 @@ class Application {
          } catch (MainException $e) {
              $e->solveException();
          } catch (\Exception $e) {
-             $e->getMessage();
+             echo $e->getMessage();
          }
     }
 }

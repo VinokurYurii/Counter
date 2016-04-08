@@ -34,4 +34,16 @@ class Request {
     private function secureData($data) {
         return filter_var(htmlspecialchars($data), FILTER_SANITIZE_STRING); // Removes tags and removes special characters or codes, if necessary.
     }
+
+    public function isAjax() {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+
+    public function getAjaxData() {
+        $data = array();
+        foreach($_POST as $key => $value) {
+            $data[$this->secureData($key)] = $this->secureData($value);
+        }
+        return $data;
+    }
 };
