@@ -106,8 +106,9 @@ class Application {
          * get route depending on REQUEST_URI
          */
         $route = Service::get('router')->parseRoute(htmlspecialchars($_SERVER['REQUEST_URI']));
-
-        //echo '<pre>';print_r($route); die();
+        //foreach($route as $k=>$v) {
+        //    Service::get('log')->addLog('app ' . $k . ' => '.$v);
+        //}
          try {
              if (!empty($route)) {
                  /**

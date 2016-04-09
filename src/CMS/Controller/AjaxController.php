@@ -6,7 +6,7 @@ use Framework\Controller\Controller;
 use Framework\Exception\AuthRequredException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\DI\Service;
-use Framework\Validation\Validator;
+use Framework\Response\JsonResponse;
 
 /**
  * Class AjaxController
@@ -15,7 +15,11 @@ use Framework\Validation\Validator;
 class AjaxController extends Controller {
 
     public function handleAction() {
-        $request = $this->getRequest();
+        $response = new JsonResponse(array('AjaxController' => 'Send'));
+        Service::get('log')->addLog($response->content, 'warning');
+        $response->send();
+        //echo 'return';
+        /*$request = $this->getRequest();
         if($request->isPost() && $request->isAjax()) {
             $data = $request->getAjaxData();
             if(!empty($data)) {
@@ -23,23 +27,28 @@ class AjaxController extends Controller {
                     switch($data['action']) {
                         case 'test':
                             echo 'Work!';
-                            return $data;
+                            $data['json'] = json_encode($data);
+                            echo  json_encode($data);
                             break;
                         default:
-                            return array('error' => 'Empty value of $data[action] Ajax Exception');
+                            //return array('error' => 'Empty value of $data[action] Ajax Exception');
+                            echo 'error: Empty value of $data[action] Ajax Exception';
                     }
                 }
                 else {
-                    return array('error' => 'Empty $data[action] Ajax Exception');
+                    //return array('error' => 'Empty $data[action] Ajax Exception');
+                    echo 'error: Empty $data[action] Ajax Exception';
                 }
             }
             else {
-                return array('error' => 'Empty $data Ajax Exception');
+                //return array('error' => 'Empty $data Ajax Exception');
+                echo 'error: Empty $data Ajax Exception';
             }
         }
         else {
-            return array('error' => 'Not Ajax Exception');
-        }
+            //return array('error' => 'Not Ajax Exception');
+            echo 'error: Not Ajax Exception';
+        }*/
     }
 
     /*function test_function() {

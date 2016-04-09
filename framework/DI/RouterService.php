@@ -41,7 +41,6 @@ class RouterService implements ServiceInterface {
         if(!preg_match('~/$~', $url)) { // resulting in an overall view
             $url .= '/';
         }
-
         $route_found = null;
         foreach(self::$map as $name => $route){
             $patternInfo = $this->prepare($route);

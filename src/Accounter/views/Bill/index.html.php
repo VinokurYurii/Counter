@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="col-sm-8 blog-main">
-    <form action="/counter/ajax_receiver"  id="show" method="post" accept-charset="utf-8">
+    <form action="/ajax_receiver"  id="show" method="post" accept-charset="utf-8">
         <input type="text" name="favorite_beverage" value="" placeholder="Favorite restaurant" />
         <input type="text" name="favorite_restaurant" value="" placeholder="Favorite beverage" />
         <select name="gender">
@@ -36,18 +36,18 @@
             data = $(this).serialize() + "&" + $.param(data);
             $.ajax({
                 type: "POST",
-                dataType: "json",
-                url: "/counter/ajax_receiver", //Relative or absolute path to response.php file
+                //dataType: "json",
+                url: "/ajax_receiver", //Relative or absolute path to response.php file
                 data: data,
                 success: function(data) {
-                    $(".the-return").html(
+                    $(".the-return").html(data.responseText/*
                         "Favorite beverage: " + data["favorite_beverage"] + "<br />Favorite restaurant: " +
-                        data["favorite_restaurant"] + "<br />Gender: " + data["gender"] + "<br />JSON: " + data["json"]
+                        data["favorite_restaurant"] + "<br />Gender: " + data["gender"] + "<br />JSON: " + data["json"]*/
                     );
-                    alert("Form submitted successfully.\nReturned json: " + data["json"]);
+                    console.log(data);
                 },
                 error :	function(xhr, textStatus, errorObj){
-                    alert('Произошла критическая ошибка!');
+                    alert('Произошла критическая ошибка!');console.log(xhr.responseText);console.log(textStatus+' => '+errorObj);
                 }
             });
             return false;

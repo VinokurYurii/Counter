@@ -111,7 +111,7 @@ return array(
         'security'   => array('ROLE_USER'),
     ),
     'ajax_receiver'    => array(
-        'pattern'  => 'ajax_receiver',
+        'pattern'  => '/ajax_receiver',
         'controller'    => 'CMS\\Controller\\AjaxController',
         'action'        => 'handle',
         '_requirements' => array(

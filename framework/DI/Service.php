@@ -6,7 +6,7 @@ use Framework\Exception\ServiceException;
 
 class Service {
 
-    public static $services = array('security', 'session', 'router', 'db', 'app', 'config', 'formatdata');
+    public static $services = array('security', 'session', 'router', 'db', 'app', 'config', 'formatdata', 'log');
 
     private static $prefix = 'Framework\\DI\\';
 

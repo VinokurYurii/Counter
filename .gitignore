@@ -1,3 +1,4 @@
 .idea/*
 error.log
 app/config/config.php
+log/log.txt
