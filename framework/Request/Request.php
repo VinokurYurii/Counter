@@ -13,11 +13,13 @@ class Request {
             return false;
         }
         else {
-            if (!Service::get('security')->isTokenMatch()) {
-                throw new SecurityException('CSRF atack');
-            }
-            if (!Service::get('security')->isAuthenticated() && !in_array($_SERVER['REQUEST_URI'], $this->allowedPath)) {
-                throw new AuthRequredException('You don\'t logined user. Please Log in os sign in.');
+            if(!$this->isAjax()) {
+                if (!Service::get('security')->isTokenMatch()) {
+                    throw new SecurityException('CSRF atack');
+                }
+                if (!Service::get('security')->isAuthenticated() && !in_array($_SERVER['REQUEST_URI'], $this->allowedPath)) {
+                    throw new AuthRequredException('You don\'t logined user. Please Log in os sign in.');
+                }
             }
             return true;
         }
@@ -36,6 +38,8 @@ class Request {
     }
 
     public function isAjax() {
+        Service::get('log')->addLog($_SERVER['HTTP_X_REQUESTED_WITH']);
+        Service::get('log')->addLog(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 

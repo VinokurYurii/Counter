@@ -4,9 +4,6 @@ namespace Framework\DI;
 
 class LogService implements ServiceInterface {
     private static $instance;
-    private static $logFilePath = __DIR__ . '/../../log/log.txt';
-
-
 
     public static function getInstance() {
         if(empty(self::$instance)) {
@@ -16,11 +13,14 @@ class LogService implements ServiceInterface {
     }
 
     public function addLog($log, $logLevel = 'info') {
-        if(!file_exists(self::$logFilePath)) {
-            fopen(self::$logFilePath, 'w');
+
+        $path = __DIR__ . '/../../log/log.txt';
+
+        if(!file_exists($path)) {
+            fopen($path, 'w');
         }
         $time = date("m.d.y H:i:s");
-        $fp = fopen(self::$logFilePath, 'a');
+        $fp = fopen($path, 'a');
 
         fwrite($fp, $time . ' / ' . $logLevel . ' / ' . $log . "\n");
         fclose($fp);

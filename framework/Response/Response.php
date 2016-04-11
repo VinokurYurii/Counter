@@ -9,7 +9,7 @@ namespace Framework\Response;
 class Response {
     protected $headers = array();
 
-    public $code, $content, $type;
+    public $content, $code, $type;
 
     /**
      * @codes array collect most useless codes

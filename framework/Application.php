@@ -10,6 +10,7 @@ use Framework\Response\ResponseRedirect;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Response\Response;
 use Framework\DI\Service;
+use Framework\Request\Request;
 
 /**
  * Class Application
@@ -82,9 +83,11 @@ class Application {
                 $response->sendHeaders();
             }
             else if ($response instanceof JsonResponse) {
-                $response->sendBody();
+                Service::get('log')->addLog('instance of JsonResponse');
+                $response->send();
             }
             else if ($response instanceof Response) {
+                Service::get('log')->addLog('instance of response');
                 $response->send();
             }
             else {
