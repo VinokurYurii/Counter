@@ -3,57 +3,45 @@
 namespace CMS\Controller;
 
 use Framework\Controller\Controller;
-use Framework\Exception\AuthRequredException;
-use Framework\Exception\HttpNotFoundException;
 use Framework\DI\Service;
 use Framework\Response\JsonResponse;
+use Accounter\Model\BillType;
 
 /**
  * Class AjaxController
  * @package CMS\Controller
  */
-class AjaxController extends Controller {
+class AjaxController extends Controller
+{
 
-    public function handleAction() {
-        $response = new JsonResponse(array('AjaxController' => 'Send'));
-        Service::get('log')->addLog($response->content, 'warning');
-        $response->send();
-        //echo 'return';
-        /*$request = $this->getRequest();
-        if($request->isPost() && $request->isAjax()) {
+    public function handleAction()
+    {
+        Service::get('log')->addLog('AjaxController');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
             $data = $request->getAjaxData();
-            if(!empty($data)) {
-                if(isset($data['action'])) {
-                    switch($data['action']) {
+            if (!empty($data)) {
+                if (isset($data['action'])) {
+                    switch ($data['action']) {
                         case 'test':
-                            echo 'Work!';
-                            $data['json'] = json_encode($data);
-                            echo  json_encode($data);
+                            $bills = BillType::findBills('all');
+
+                            return new JsonResponse((array)$bills);
                             break;
                         default:
-                            //return array('error' => 'Empty value of $data[action] Ajax Exception');
-                            echo 'error: Empty value of $data[action] Ajax Exception';
+                            return new JsonResponse(array('error' => 'Empty value of $data[action] Ajax Exception'));
                     }
                 }
                 else {
-                    //return array('error' => 'Empty $data[action] Ajax Exception');
-                    echo 'error: Empty $data[action] Ajax Exception';
+                    return new JsonResponse(array('error' => 'Empty $data[action] Ajax Exception'));
                 }
             }
             else {
-                //return array('error' => 'Empty $data Ajax Exception');
-                echo 'error: Empty $data Ajax Exception';
+                return new JsonResponse(array('error' => 'Empty $data Ajax Exception'));
             }
         }
         else {
-            //return array('error' => 'Not Ajax Exception');
-            echo 'error: Not Ajax Exception';
-        }*/
+            return new JsonResponse(array('error' => 'Not Ajax: Ajax Exception'));
+        }
     }
-
-    /*function test_function() {
-        $return = $_POST;
-        $return["json"] = json_encode($return);
-        echo json_encode($return);
-    }*/
 }
