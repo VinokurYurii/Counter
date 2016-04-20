@@ -118,5 +118,19 @@ return array(
             '_method' => 'POST'
         ),
         'security'   => array('ROLE_USER'),
+    ),
+    'cms'    => array(
+        'pattern'  => '/cms',
+        'controller'    => 'CMS\\Controller\\CMSController',
+        'action'        => 'index'
+    ),
+    'cms_model'    => array(
+        'pattern'  => '/cms/{src}/{model}',
+        'controller'    => 'CMS\\Controller\\CMSController',
+        'action'        => 'display',
+        '_requirements' => array(
+            'src'   => '\w+',
+            'model' => '\w+'
+        )
     )
 );

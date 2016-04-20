@@ -11,6 +11,10 @@ class Loader {
         return self::$instance;
     }
 
+    public static function getNamespaces() {
+        return self::$namespaces;
+    }
+
     public static function load($classname) { //load namespaces
         $path = '';
         foreach(self::$namespaces as $namespace => $nsRootPath) { //checking self::$namespaces for matching

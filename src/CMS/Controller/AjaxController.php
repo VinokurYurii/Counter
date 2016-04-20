@@ -25,11 +25,17 @@ class AjaxController extends Controller
                     switch ($data['action']) {
                         case 'test':
                             $bills = BillType::findBills('all');
-
                             return new JsonResponse((array)$bills);
                             break;
+                        case 'save':
+                            $model = $data['model'];
+                            $pathParts = array_reverse(explode('/', $model));
+                            $target = $pathParts[1] . '\\Model\\' . $pathParts[0];
+                            $targetOject = new $target( json_decode( $data['json'], true ) );
+                            break;
+
                         default:
-                            return new JsonResponse(array('error' => 'Empty value of $data[action] Ajax Exception'));
+                            return new JsonResponse(array('error' => 'Wrong value of $data[action] Ajax Exception'));
                     }
                 }
                 else {

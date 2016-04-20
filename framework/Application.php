@@ -83,11 +83,9 @@ class Application {
                 $response->sendHeaders();
             }
             else if ($response instanceof JsonResponse) {
-                Service::get('log')->addLog('instance of JsonResponse');
                 $response->send();
             }
             else if ($response instanceof Response) {
-                Service::get('log')->addLog('instance of response');
                 $response->send();
             }
             else {
