@@ -44,5 +44,6 @@ class CMS extends ActiveRecord {
             $jsonArray[] = json_encode((array) $object);
         }
         return json_encode($jsonArray);
+        //return $jsonArray;
     }
 }

@@ -6,6 +6,8 @@ use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Response\JsonResponse;
 use Accounter\Model\BillType;
+use CMS\Model\CMS;
+
 
 /**
  * Class AjaxController
@@ -25,13 +27,20 @@ class AjaxController extends Controller
                     switch ($data['action']) {
                         case 'test':
                             $bills = BillType::findBills('all');
+                            Service::get('log')->addLog($data['model']);
                             return new JsonResponse((array)$bills);
                             break;
-                        case 'save':
+                        case 'getModel':
                             $model = $data['model'];
-                            $pathParts = array_reverse(explode('/', $model));
+                            $pathParts = array_reverse( explode('/', $model));
                             $target = $pathParts[1] . '\\Model\\' . $pathParts[0];
-                            $targetOject = new $target( json_decode( $data['json'], true ) );
+                            Service::get('log')->addLog($data['model'] . ' --> getModel');
+                            $cms = new CMS();
+                            $targetObjects = $cms->getOblects($target);
+                            return new JsonResponse((array)$targetObjects);
+                            break;
+                        case 'save':
+                            $targetObject = new $target( json_decode( $data['json'], true ) );
                             break;
 
                         default:

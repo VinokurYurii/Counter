@@ -21,7 +21,6 @@ class CMSController extends Controller {
         $investigationModel = $src . '\\Model\\' . $model;
         $cms = new CMS();
         $json = $cms->getOblects($investigationModel);
-        Service::get('log')->addLog($json);
         return $this->render('display.html', array('json' => $json));
     }
 }
