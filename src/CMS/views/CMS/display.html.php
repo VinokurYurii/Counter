@@ -1,7 +1,7 @@
 <div class="the-return">
 </div>
 <script type="text/javascript">
-    
+
     function IsJsonString(str) {
         try {
             JSON.parse(str);

@@ -107,9 +107,6 @@ class Application {
          * get route depending on REQUEST_URI
          */
         $route = Service::get('router')->parseRoute(htmlspecialchars($_SERVER['REQUEST_URI']));
-        //foreach($route as $k=>$v) {
-        //    Service::get('log')->addLog('app ' . $k . ' => '.$v);
-        //}
          try {
              if (!empty($route)) {
                  /**
@@ -123,7 +120,8 @@ class Application {
                      if (is_null($user)) {
                          throw new AuthRequredException('If you wont do this action please login or signin.');
                      }
-                     if (!in_array($user->role, $route['security'])) {
+                     //if (!in_array($user->role, $route['security'])) {
+                     if (!Service::get('security')->haveRight($user->role, $route['security'][0])) {
                          throw new SecurityException('You have not right for this action.');
                      }
                  }

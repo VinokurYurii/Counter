@@ -8,11 +8,17 @@ use Framework\Request\Request;
 class SecurityService implements ServiceInterface {
     private static $instance;
 
+    private static $roles = array('ROLE_USER' => 2, 'ROLE_ADMIN' => 5);
+
     public static function getInstance() {
         if(empty(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    public function haveRight($currentRole, $needlesRole) {
+        return self::$roles[$currentRole] >= self::$roles[$needlesRole];
     }
 
     public function isAuthenticated() {

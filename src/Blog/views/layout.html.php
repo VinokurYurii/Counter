@@ -43,6 +43,7 @@ $activeIfRoute = function ($item) use (&$route) {
                 <li <?php echo $activeIfRoute('home') ?>><a href="<?php echo $getRoute('home')?>">Home</a></li>
                 <li <?php echo $activeIfRoute('add_post') ?>><a href="<?php echo $getRoute('add_post')?>">Add Post</a></li>
                 <li <?php echo $activeIfRoute('bills') ?>><a href="<?php echo $getRoute('bills')?>">Accounter</a></li>
+                <li <?php echo $activeIfRoute('cms') ?>><a href="<?php echo $getRoute('cms')?>">CMS</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php if (is_null($user)) { ?>

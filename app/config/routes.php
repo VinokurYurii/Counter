@@ -122,7 +122,8 @@ return array(
     'cms'    => array(
         'pattern'  => '/cms',
         'controller'    => 'CMS\\Controller\\CMSController',
-        'action'        => 'index'
+        'action'        => 'index',
+        'security'   => array('ROLE_ADMIN')
     ),
     'cms_model'    => array(
         'pattern'  => '/cms/{src}/{model}',
@@ -131,6 +132,7 @@ return array(
         '_requirements' => array(
             'src'   => '\w+',
             'model' => '\w+'
-        )
+        ),
+        'security'   => array('ROLE_ADMIN')
     )
 );
